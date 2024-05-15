@@ -1,0 +1,62 @@
+name: Sync Upstream-Downstream
+description: Syncs and merges provided downstream repo with the upstream repos. Fork of https://github.com/dabreadman/sync-upstream-repo.
+author: dchourasia
+
+inputs:
+  upstream_repo:
+    description: URL of upstream gitHub repo
+    required: true
+  upstream_branch:
+    description: Branch to merge from upstream (defaults to downstream branch)
+    required: false
+    default: "main"
+  downstream_repo:
+    description: URL of downstream gitHub  repo
+    required: false
+    default: "GITHUB_REPOSITORY"
+  downstream_branch:
+    description: Branch to merge into downstream
+    required: false
+    default: ""
+  token:
+    description: GitHub Bot token
+    required: true
+  fetch_args:
+    description: Git fetch arguments
+    required: false
+    default: ""
+  merge_args:
+    description: Git merge arguments
+    required: false
+    default: ""
+  push_args:
+    description: Git push arguments
+    required: false
+    default: ""
+  spawn_logs: 
+    description: Toggle to spawn `sync-upstream-repo` with time logs
+    required: true
+    default: false
+  ignore_files:
+    description: Comma separated list of globbing paths which needs to be ignored while merge
+    required: false
+    default: ""
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.upstream_repo }}
+    - ${{ inputs.upstream_branch }}
+    - ${{ inputs.downstream_branch }}
+    - ${{ inputs.token }}
+    - ${{ inputs.fetch_args }}
+    - ${{ inputs.merge_args }}
+    - ${{ inputs.push_args }}
+    - ${{ inputs.spawn_logs }}
+    - ${{ inputs.downstream_repo }}
+    - ${{ inputs.ignore_files }}
+
+branding:
+  icon: "git-merge"
+  color: "blue"
