@@ -1,4 +1,4 @@
-name: Sync Upstream-Downstream
+name: Sync Branches
 description: Syncs and merges provided downstream repo with the upstream repos. Fork of https://github.com/dabreadman/sync-upstream-repo.
 author: dchourasia
 
