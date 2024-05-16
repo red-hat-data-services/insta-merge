@@ -17,6 +17,7 @@ if [[ -z "$UPSTREAM_REPO" ]]; then
   echo "Missing \$UPSTREAM_REPO"
   exit 1
 fi
+sudo apt-get install -y curl
 
 if [[ -z "$UPSTREAM_BRANCH" ]]
 then
