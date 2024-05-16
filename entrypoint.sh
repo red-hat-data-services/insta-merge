@@ -18,6 +18,15 @@ if [[ -z "$UPSTREAM_REPO" ]]; then
   exit 1
 fi
 
+if [[ -z "$UPSTREAM_BRANCH" ]]
+then
+  REPO_NAME=${UPSTREAM_REPO/https:\/\/github.com\//}
+  REPO_NAME=${REPO_NAME%.git}
+  echo "REPO_NAME=$REPO_NAME"
+  UPSTREAM_BRANCH=$(curl -s https://api.github.com/repos/$REPO_NAME | jq -r '.default_branch')
+  echo "UPSTREAM_BRANCH=$UPSTREAM_BRANCH"
+fi
+
 if [[ -z "$DOWNSTREAM_BRANCH" ]]; then
   echo "Missing \$DOWNSTREAM_BRANCH"
   echo "Default to ${UPSTREAM_BRANCH}"
