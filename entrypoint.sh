@@ -14,6 +14,14 @@ DOWNSTREAM_REPO=$9
 IGNORE_FILES=${10}
 PR_URL=${11}
 
+export GH_TOKEN=${GITHUB_TOKEN}
+PR_MERGE_RESULT=$(gh pr merge --merge --admin ${PR_URL})
+if [[ $PR_MERGE_RESULT == *"Merged pull request"* ]]
+then
+  echo "Merged the PR!!"
+  exit 0
+fi
+
 if [[ -z "$UPSTREAM_REPO" ]]; then
   echo "Missing \$UPSTREAM_REPO"
   exit 1
@@ -96,10 +104,8 @@ elif [[ $MERGE_RESULT != *"Already up to date."* ]]
 then
   git commit -m "Merged upstream"
   git push ${PUSH_ARGS} origin ${DOWNSTREAM_BRANCH} || exit $?
+  sleep 2
 fi
-
-export GH_TOKEN=${GITHUB_TOKEN}
-gh pr merge --merge --admin ${PR_URL}
 
 cd ..
 rm -rf work
