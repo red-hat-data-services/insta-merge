@@ -16,7 +16,7 @@ PR_URL=${11}
 
 export GH_TOKEN=${GITHUB_TOKEN}
 PR_MERGE_RESULT=$(gh pr merge --merge --admin ${PR_URL})
-if [[ $PR_MERGE_RESULT == *"Merged pull request"* ]]
+if [[ $PR_MERGE_RESULT == "" ]] || [[ $PR_MERGE_RESULT == *"Merged pull request"* ]]
 then
   echo "Merged the PR!!"
   exit 0
