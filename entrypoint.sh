@@ -12,6 +12,7 @@ PUSH_ARGS=$7
 SPAWN_LOGS=$8
 DOWNSTREAM_REPO=$9
 IGNORE_FILES=${10}
+PR_URL=${11}
 
 if [[ -z "$UPSTREAM_REPO" ]]; then
   echo "Missing \$UPSTREAM_REPO"
@@ -96,6 +97,8 @@ then
   git commit -m "Merged upstream"
   git push ${PUSH_ARGS} origin ${DOWNSTREAM_BRANCH} || exit $?
 fi
+
+gh pr merge --merge --admin ${PR_URL}
 
 cd ..
 rm -rf work

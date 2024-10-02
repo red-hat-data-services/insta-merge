@@ -1,5 +1,5 @@
-name: Sync Git Branches
-description: Syncs and merges provided downstream repo with the upstream repos. Fork of https://github.com/dabreadman/sync-upstream-repo.
+name: Insta Merge
+description: Takes care of rebasing the head branch before merging the PR along with resolving the conflicts based on user provided paths
 author: dchourasia
 
 inputs:
@@ -37,8 +37,12 @@ inputs:
     description: Toggle to spawn `sync-upstream-repo` with time logs
     required: true
     default: false
-  ignore_files:
+  resolve_conflicts_for:
     description: Comma separated list of globbing paths which needs to be ignored while merge
+    required: false
+    default: ""
+  pr_url:
+    description: URL of the PR to merge
     required: false
     default: ""
 
