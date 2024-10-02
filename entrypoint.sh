@@ -98,6 +98,7 @@ then
   git push ${PUSH_ARGS} origin ${DOWNSTREAM_BRANCH} || exit $?
 fi
 
+export GH_TOKEN=${GITHUB_TOKEN}
 gh pr merge --merge --admin ${PR_URL}
 
 cd ..
