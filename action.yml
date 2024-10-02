@@ -59,7 +59,8 @@ runs:
     - ${{ inputs.push_args }}
     - ${{ inputs.spawn_logs }}
     - ${{ inputs.downstream_repo }}
-    - ${{ inputs.ignore_files }}
+    - ${{ inputs.resolve_conflicts_for }}
+    - ${{ inputs.pr_url }}
 
 branding:
   icon: "git-merge"
