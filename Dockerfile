@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM quay.io/rhoai-konflux/alpine:latest
 
 RUN apk add --no-cache \
 	bash \
