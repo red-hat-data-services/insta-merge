@@ -24,6 +24,10 @@ if [[ "$1 $2" == "pr merge" ]]; then
       echo "error connecting to api.github.com" >&2
       exit 1
       ;;
+    unclassified-exit-2)
+      echo "gh pr merge returned exit status 2" >&2
+      exit 2
+      ;;
     conflicting-pr)
       echo "Pull request is not mergeable" >&2
       exit 1
@@ -38,6 +42,10 @@ if [[ "$1 $2" == "pr view" ]]; then
       exit 1
       ;;
     connection-error-pr-open)
+      printf 'OPEN\tMERGEABLE\n'
+      exit 0
+      ;;
+    unclassified-exit-2)
       printf 'OPEN\tMERGEABLE\n'
       exit 0
       ;;
@@ -64,6 +72,18 @@ export GH_SCENARIO=connection-error-pr-open
 if try_merge_pr https://github.com/example/repo/pull/1; then
   echo "Expected a failed merge to fail when GitHub confirms the PR is still open." >&2
   exit 1
+fi
+
+export GH_SCENARIO=unclassified-exit-2
+if try_merge_pr https://github.com/example/repo/pull/1; then
+  echo "Expected an unclassified gh exit status 2 to fail." >&2
+  exit 1
+else
+  status=$?
+  if [[ "$status" -eq 2 ]]; then
+    echo "Expected status 2 to be reserved for confirmed conflicts." >&2
+    exit 1
+  fi
 fi
 
 export GH_SCENARIO=merged-empty-output
