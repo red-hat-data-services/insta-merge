@@ -15,11 +15,19 @@ IGNORE_FILES=${10}
 PR_URL=${11}
 
 export GH_TOKEN=${GITHUB_TOKEN}
-PR_MERGE_RESULT=$(gh pr merge --merge --admin ${PR_URL})
-if [[ $PR_MERGE_RESULT == "" ]] || [[ $PR_MERGE_RESULT == *"Merged pull request"* ]]
-then
-  echo "Merged the PR!!"
-  exit 0
+if [[ -n "$PR_URL" ]]; then
+  source /home/ci/merge-pr.sh
+  if try_merge_pr "$PR_URL"; then
+    exit 0
+  else
+    PR_MERGE_STATUS=$?
+  fi
+
+  # Status 2 means GitHub confirmed that the PR is open and conflicting.
+  # Keep the existing sync-and-push path to apply configured conflict rules.
+  if [[ $PR_MERGE_STATUS -ne 2 ]]; then
+    exit "$PR_MERGE_STATUS"
+  fi
 fi
 
 if [[ -z "$UPSTREAM_REPO" ]]; then
