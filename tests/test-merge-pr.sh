@@ -20,6 +20,10 @@ if [[ "$1 $2" == "pr merge" ]]; then
       echo "error connecting to api.github.com" >&2
       exit 1
       ;;
+    connection-error-pr-open)
+      echo "error connecting to api.github.com" >&2
+      exit 1
+      ;;
     conflicting-pr)
       echo "Pull request is not mergeable" >&2
       exit 1
@@ -32,6 +36,10 @@ if [[ "$1 $2" == "pr view" ]]; then
     connection-error)
       echo "error connecting to api.github.com" >&2
       exit 1
+      ;;
+    connection-error-pr-open)
+      printf 'OPEN\tMERGEABLE\n'
+      exit 0
       ;;
     conflicting-pr)
       printf 'OPEN\tCONFLICTING\n'
@@ -49,6 +57,12 @@ PATH="$TEST_BIN:$PATH"
 export GH_SCENARIO=connection-error
 if try_merge_pr https://github.com/example/repo/pull/1; then
   echo "Expected a failed merge with an API connection error to fail." >&2
+  exit 1
+fi
+
+export GH_SCENARIO=connection-error-pr-open
+if try_merge_pr https://github.com/example/repo/pull/1; then
+  echo "Expected a failed merge to fail when GitHub confirms the PR is still open." >&2
   exit 1
 fi
 
